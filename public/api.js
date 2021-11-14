@@ -42,6 +42,10 @@ async function requestTodosRecados(usuario, token) {
     }
 }
 
+async function requestUmRecado(usuario, token, idRecado) {
+
+}
+
 async function requestNewRecado() {
     try {
 
