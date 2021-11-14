@@ -75,3 +75,38 @@ function criarRecado() { }
 function editarRecado() { }
 
 function excluirRecado() { }
+
+function geraListaRecados(usuarioAtual, tokenSessao) {
+    let tableBody = document.getElementById("listaRecados")
+    let conteudoTableBody = ""
+    let arrayRecados = requestTodosRecados(usuarioAtual, tokenSessao)
+    for (let id in arrayRecados) {
+        let conteudoLinha = `<tr>
+        <th scope="row">${id}</th>
+        <td class="col-2">${arrayRecados[id].descricao}</td>
+        <td class="col-8">
+            ${arrayRecados[id].detalhamento}</td>
+        <td class="col-2">
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalEditar"
+                onclick="gerarModalEdicao('${usuarioAtual.username}', ${id})">Editar</button>
+            <button class="btn btn-danger" data-bs-toggle="modal"
+                data-bs-target="#modalExcluir" onclick="gerarModalExclusao('${usuarioAtual.username}',${id})">Excluir</button>
+        </td>
+    </tr>`
+        conteudoTableBody += conteudoLinha
+    }
+    tableBody.innerHTML = conteudoTableBody
+}
+
+function iniciaSistemaRecados() {
+    let usuarioSessao = sessionStorage.getItem("usuario")
+    let tokenSessao = sessionStorage.getItem("token")
+    if ((usuarioSessao != null && tokenSessao != null)) {
+        geraListaRecados(usuarioSessao, tokenSessao)
+    }
+    else {
+        window.location.href = "./entrada.html";
+    }
+}
+
+window.onload = iniciaSistemaRecados()

@@ -29,8 +29,26 @@ async function requestLogon(nome, senha) {
     }
 }
 
-async function requestNewRecado() {
+async function requestTodosRecados(usuario, token) {
+    try {
+        const response = await api.get("/recado", {
+            usuario: usuario,
+            token: token
+        })
+        return response.data.array;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
 
+async function requestNewRecado() {
+    try {
+
+    }
+    catch (error) {
+        console.log(error);
+    }
 }
 function logoff() { }
 
