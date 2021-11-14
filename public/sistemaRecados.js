@@ -54,17 +54,21 @@ async function logon() {
     let campoSenha = document.getElementById("campoSenha").value
     let resposta = requestLogon(campoUsuario, campoSenha)
     if (resposta.msg == "sucesso") {
-        sessionStorage['token'] = resposta.token;
+        sessionStorage.setItem("usuario", campoUsuario)
+        sessionStorage.setItem("token", token)
         window.location.href = "./gerenciador.html";
     } else if (resposta.msg == "senhaIncorreta") {
-
+        displayAlertaPagina("senhaIncorreta")
     }
     else if (resposta.msg == "usuarioIncorreto") {
-
+        displayAlertaPagina("usuarioIncorreto")
     }
 }
 
-function logoff() { }
+function logoff() {
+    sessionStorage.removeItem("token")
+    window.location.href = "./entrada.html";
+}
 
 function criarRecado() { }
 
