@@ -70,16 +70,27 @@ function logoff() {
     window.location.href = "./entrada.html";
 }
 
-function criarRecado() { }
+function criarRecado() {
+    let descricao = document.getElementById("campoDescricaoEntrada").value
+    let detalhamento = document.getElementById("campoDetalhamentoEntrada").value
+    let usuarioSessao = sessionStorage.getItem("usuario")
+    let tokenSessao = sessionStorage.getItem("token")
+    if (descricao != "") {
+        requestCriarRecado(usuarioSessao, tokenSessao, descricao, detalhamento)
+        geraListaRecados(usuarioAtual)
+    }
+}
 
 function editarRecado() { }
 
 function excluirRecado() { }
 
-function geraListaRecados(usuarioAtual, tokenSessao) {
+function geraListaRecados() {
+    let usuarioSessao = sessionStorage.getItem("usuario")
+    let tokenSessao = sessionStorage.getItem("token")
     let tableBody = document.getElementById("listaRecados")
     let conteudoTableBody = ""
-    let arrayRecados = requestTodosRecados(usuarioAtual, tokenSessao)
+    let arrayRecados = requestTodosRecados(usuarioSessao, tokenSessao)
     for (let id in arrayRecados) {
         let conteudoLinha = `<tr>
         <th scope="row">${id}</th>
@@ -88,9 +99,9 @@ function geraListaRecados(usuarioAtual, tokenSessao) {
             ${arrayRecados[id].detalhamento}</td>
         <td class="col-2">
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalEditar"
-                onclick="gerarModalEdicao('${usuarioAtual.username}', ${id})">Editar</button>
+                onclick="gerarModalEdicao('${usuarioSessao.nomeUsuario}', ${id})">Editar</button>
             <button class="btn btn-danger" data-bs-toggle="modal"
-                data-bs-target="#modalExcluir" onclick="gerarModalExclusao('${usuarioAtual.username}',${id})">Excluir</button>
+                data-bs-target="#modalExcluir" onclick="gerarModalExclusao('${usuarioSessao.nomeUsuario}',${id})">Excluir</button>
         </td>
     </tr>`
         conteudoTableBody += conteudoLinha
@@ -98,11 +109,37 @@ function geraListaRecados(usuarioAtual, tokenSessao) {
     tableBody.innerHTML = conteudoTableBody
 }
 
+function gerarModalEdicao(idRecadoEditar) {
+    let usuarioSessao = sessionStorage.getItem("usuario")
+    let tokenSessao = sessionStorage.getItem("token")
+    let modalEdicao = document.getElementById('modalEditar')
+    let recado = requestUmRecado(usuarioSessao, tokenSessao, idRecadoEditar)
+    modalEdicao.setAttribute("data-bs-idRecado", idRecadoEditar)
+    modalEdicao.setAttribute("data-bs-usuarioSessao", usuarioSessao)
+    let modalCampoDescricao = document.getElementById("modalEditarDescricaoRecado")
+    modalCampoDescricao.value = recado.descricao
+    let modalCampoDetalhamento = document.getElementById("modalEditarDetalhamentoRecado")
+    modalCampoDetalhamento.value = recado.detalhamento
+}
+
+function gerarModalExclusao(idRecadoExcluir) {
+    let usuarioSessao = sessionStorage.getItem("usuario")
+    let tokenSessao = sessionStorage.getItem("token")
+    let modalExclusao = document.getElementById('modalExcluir')
+    let recado = requestUmRecado(usuarioSessao, tokenSessao, idRecadoExcluir)
+    modalExclusao.setAttribute("data-bs-idRecado", idRecadoExcluir)
+    modalExclusao.setAttribute("data-bs-usuarioSessao", usuarioSessao)
+    let modalCampoDescricao = document.getElementById("modalExcluirDescricaoRecado")
+    modalCampoDescricao.innerHTML = recado.descricao
+    let modalCampoDetalhamento = document.getElementById("modalExcluirDetalhamentoRecado")
+    modalCampoDetalhamento.innerHTML = recado.detalhamento
+}
+
 function iniciaSistemaRecados() {
     let usuarioSessao = sessionStorage.getItem("usuario")
     let tokenSessao = sessionStorage.getItem("token")
     if ((usuarioSessao != null && tokenSessao != null)) {
-        geraListaRecados(usuarioSessao, tokenSessao)
+        geraListaRecados()
     }
     else {
         window.location.href = "./entrada.html";

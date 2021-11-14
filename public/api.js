@@ -43,21 +43,35 @@ async function requestTodosRecados(usuario, token) {
 }
 
 async function requestUmRecado(usuario, token, idRecado) {
-
-}
-
-async function requestNewRecado() {
     try {
-
+        const response = await api.get("/recado", {
+            usuario: usuario,
+            token: token,
+            params: {
+                id: idRecado
+            }
+        })
+        return response.data.recado;
     }
     catch (error) {
         console.log(error);
     }
 }
-function logoff() { }
 
-function criarRecado() { }
+async function requestCriarRecado(usuario, token, descricao, detalhamento) {
+    try {
+        const response = await api.post("/recado", {
+            usuario,
+            token,
+            descricao,
+            detalhamento
+        })
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
 
-function editarRecado() { }
+async function requestEditarRecado() {
 
-function excluirRecado() { }
+}
