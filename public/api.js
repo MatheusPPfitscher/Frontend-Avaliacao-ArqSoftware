@@ -1,12 +1,14 @@
 const api = axios.create({
-    baseURL: ""
+    baseURL: "https://api-avaliacao-matheuspp.herokuapp.com"
 });
 
 async function requestCriarUsuario(nome, senha) {
     try {
         const req = await api.post("/usuario", {
-            nome: nome,
-            senha: senha
+            data: {
+                nome: nome,
+                senha: senha
+            }
         })
         return req.data.alerta
     }
@@ -19,8 +21,10 @@ async function requestCriarUsuario(nome, senha) {
 async function requestLogon(nome, senha) {
     try {
         const response = await api.post("/sessao", {
-            nome: nome,
-            senha: senha
+            data: {
+                nome: nome,
+                senha: senha
+            }
         })
         return response.data;
     }
@@ -32,8 +36,12 @@ async function requestLogon(nome, senha) {
 async function requestTodosRecados(usuario, token) {
     try {
         const response = await api.get("/recado", {
-            usuario: usuario,
-            token: token
+            data: {
+                usuario: usuario,
+            },
+            headers: {
+                Authorization: token
+            }
         })
         return response.data.array;
     }
@@ -44,11 +52,12 @@ async function requestTodosRecados(usuario, token) {
 
 async function requestUmRecado(usuario, token, idRecado) {
     try {
-        const response = await api.get("/recado", {
-            usuario: usuario,
-            token: token,
-            params: {
-                id: idRecado
+        const response = await api.get(`/recado/${idRecado}`, {
+            data: {
+                usuario: usuario
+            },
+            headers: {
+                Authorization: token
             }
         })
         return response.data.recado;
@@ -61,10 +70,14 @@ async function requestUmRecado(usuario, token, idRecado) {
 async function requestCriarRecado(usuario, token, descricao, detalhamento) {
     try {
         const response = await api.post("/recado", {
-            usuario,
-            token,
-            descricao,
-            detalhamento
+            data: {
+                usuario: usuario,
+                descricao: descricao,
+                detalhamento: detalhamento
+            },
+            headers: {
+                Authorization: token
+            }
         })
     }
     catch (error) {
@@ -72,6 +85,33 @@ async function requestCriarRecado(usuario, token, descricao, detalhamento) {
     }
 }
 
-async function requestEditarRecado() {
+async function requestEditarRecado(usuario, token, idRecado, descricao, detalhamento) {
+    try {
+        const response = await api.put(`/recado/${idRecado}`, {
+            data: {
+                usuario: usuario,
+                descricao,
+                detalhamento
+            },
+            headers: {
+                Authorization: token
+            }
+        })
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
 
+async function requestDeletarRecado(usuario, token, idRecado) {
+    try {
+        const response = await api.delete(`/recado/${idRecado}`, {
+            data: {
+                usuario: usuario
+            },
+            headers: {
+                Authorization: token
+            }
+        })
+    }
 }
