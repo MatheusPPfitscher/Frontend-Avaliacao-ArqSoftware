@@ -114,4 +114,7 @@ async function requestDeletarRecado(usuario, token, idRecado) {
             }
         })
     }
+    catch (error) {
+        console.log(error);
+    }
 }
