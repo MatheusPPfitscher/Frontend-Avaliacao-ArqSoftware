@@ -34,7 +34,7 @@ function displayAlertaPagina(alerta) {
     }
 }
 
-function criarUsuario() {
+async function criarUsuario() {
     let campoUsuario = document.getElementById("campoUsuario").value
     let campoSenha = document.getElementById("campoSenha").value
     let campoRepeteSenha = document.getElementById("campoRepeteSenha").value
@@ -42,20 +42,20 @@ function criarUsuario() {
     if (campoSenha != campoRepeteSenha) {
         displayAlertaPagina("confiraSenha")
     } else {
-        let alerta = requestCriarUsuario(campoUsuario, campoSenha)
+        let alerta = await requestCriarUsuario(campoUsuario, campoSenha)
         displayAlertaPagina(alerta)
         if (alerta == "criado") window.location.href = "./entrada.html";
     }
 
 }
 
-function logon() {
+async function logon() {
     let campoUsuario = document.getElementById("campoUsuario").value
     let campoSenha = document.getElementById("campoSenha").value
-    let resposta = requestLogon(campoUsuario, campoSenha)
+    let resposta = await requestLogon(campoUsuario, campoSenha)
     if (resposta.msg == "sucesso") {
         sessionStorage.setItem("usuario", campoUsuario)
-        sessionStorage.setItem("token", token)
+        sessionStorage.setItem("token", resposta.token)
         window.location.href = "./gerenciador.html";
     } else if (resposta.msg == "senhaIncorreta") {
         displayAlertaPagina("senhaIncorreta")
@@ -70,23 +70,23 @@ function logoff() {
     window.location.href = "./entrada.html";
 }
 
-function criarRecado() {
+async function criarRecado() {
     let descricao = document.getElementById("campoDescricaoEntrada").value
     let detalhamento = document.getElementById("campoDetalhamentoEntrada").value
     let usuarioSessao = sessionStorage.getItem("usuario")
     let tokenSessao = sessionStorage.getItem("token")
     if (descricao != "") {
-        requestCriarRecado(usuarioSessao, tokenSessao, descricao, detalhamento)
+        await requestCriarRecado(usuarioSessao, tokenSessao, descricao, detalhamento)
         geraListaRecados(usuarioAtual)
     }
 }
 
-function geraListaRecados() {
+async function geraListaRecados() {
     let usuarioSessao = sessionStorage.getItem("usuario")
     let tokenSessao = sessionStorage.getItem("token")
     let tableBody = document.getElementById("listaRecados")
     let conteudoTableBody = ""
-    let arrayRecados = requestTodosRecados(usuarioSessao, tokenSessao)
+    let arrayRecados = await requestTodosRecados(usuarioSessao, tokenSessao)
     for (let id in arrayRecados) {
         let conteudoLinha = `<tr>
         <th scope="row">${id}</th>
@@ -105,11 +105,11 @@ function geraListaRecados() {
     tableBody.innerHTML = conteudoTableBody
 }
 
-function gerarModalEdicao(idRecadoEditar) {
+async function gerarModalEdicao(idRecadoEditar) {
     let usuarioSessao = sessionStorage.getItem("usuario")
     let tokenSessao = sessionStorage.getItem("token")
     let modalEdicao = document.getElementById('modalEditar')
-    let recado = requestUmRecado(usuarioSessao, tokenSessao, idRecadoEditar)
+    let recado = await requestUmRecado(usuarioSessao, tokenSessao, idRecadoEditar)
     modalEdicao.setAttribute("data-bs-idRecado", idRecadoEditar)
     let modalCampoDescricao = document.getElementById("modalEditarDescricaoRecado")
     modalCampoDescricao.value = recado.descricao
@@ -117,11 +117,11 @@ function gerarModalEdicao(idRecadoEditar) {
     modalCampoDetalhamento.value = recado.detalhamento
 }
 
-function gerarModalExclusao(idRecadoExcluir) {
+async function gerarModalExclusao(idRecadoExcluir) {
     let usuarioSessao = sessionStorage.getItem("usuario")
     let tokenSessao = sessionStorage.getItem("token")
     let modalExclusao = document.getElementById('modalExcluir')
-    let recado = requestUmRecado(usuarioSessao, tokenSessao, idRecadoExcluir)
+    let recado = await requestUmRecado(usuarioSessao, tokenSessao, idRecadoExcluir)
     modalExclusao.setAttribute("data-bs-idRecado", idRecadoExcluir)
     let modalCampoDescricao = document.getElementById("modalExcluirDescricaoRecado")
     modalCampoDescricao.innerHTML = recado.descricao
@@ -129,23 +129,23 @@ function gerarModalExclusao(idRecadoExcluir) {
     modalCampoDetalhamento.innerHTML = recado.detalhamento
 }
 
-function salvarModalEditar() {
+async function salvarModalEditar() {
     let usuarioSessao = sessionStorage.getItem("usuario")
     let tokenSessao = sessionStorage.getItem("token")
     let modalEditar = document.getElementById('modalEditar')
     let valorDescricaoModal = document.getElementById("modalEditarDescricaoRecado").value
     let valorDetalhamentoModal = document.getElementById("modalEditarDetalhamentoRecado").value
     let idRecadoEditar = modalEditar.getAttribute("data-bs-idRecado")
-    requestEditarRecado(usuarioSessao, tokenSessao, idRecadoEditar, valorDescricaoModal, valorDetalhamentoModal)
+    await requestEditarRecado(usuarioSessao, tokenSessao, idRecadoEditar, valorDescricaoModal, valorDetalhamentoModal)
     geraListaRecados()
 }
 
-function salvarModalExcluir() {
+async function salvarModalExcluir() {
     let usuarioSessao = sessionStorage.getItem("usuario")
     let tokenSessao = sessionStorage.getItem("token")
     var modalExcluir = document.getElementById('modalExcluir')
     let idRecadoExcluir = modalExcluir.getAttribute("data-bs-idRecado")
-    requestDeletarRecado(usuarioSessao, tokenSessao, idRecadoExcluir)
+    await requestDeletarRecado(usuarioSessao, tokenSessao, idRecadoExcluir)
     geraListaRecados(usuarioAtual)
 }
 
@@ -153,11 +153,13 @@ function salvarModalExcluir() {
 function iniciaSistemaRecados() {
     let usuarioSessao = sessionStorage.getItem("usuario")
     let tokenSessao = sessionStorage.getItem("token")
-    if ((usuarioSessao != null && tokenSessao != null)) {
-        geraListaRecados()
-    }
-    else {
-        window.location.href = "./entrada.html";
+    if (document.title == "Sistema de Recados") {
+        if ((usuarioSessao != null && tokenSessao != null)) {
+            geraListaRecados()
+        }
+        else {
+            window.location.href = "./entrada.html";
+        }
     }
 }
 
