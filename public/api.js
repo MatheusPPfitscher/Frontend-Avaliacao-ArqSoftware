@@ -1,5 +1,5 @@
 const api = axios.create({
-    baseURL: "https://api-avaliacao-matheuspp.herokuapp.com"
+    baseURL: "http://localhost:8082"
 });
 
 async function requestCriarUsuario(nome, senha) {
