@@ -4,13 +4,14 @@ const api = axios.create({
 
 async function requestCriarUsuario(nome, senha) {
     try {
-        const req = await api.post("/usuario", {
+        const response = await api.post("/usuario", {
             data: {
                 nome: nome,
                 senha: senha
             }
         })
-        return req.data.alerta
+        console.log(`Criar usuario: ${response.data}`);
+        return response.data.alerta
     }
     catch (error) {
         console.log(error);
@@ -26,6 +27,7 @@ async function requestLogon(nome, senha) {
                 senha: senha
             }
         })
+        console.log(`Logon: ${response.data}`);
         return response.data;
     }
     catch (error) {
@@ -43,6 +45,7 @@ async function requestTodosRecados(usuario, token) {
                 Authorization: token
             }
         })
+        console.log(`TodosRecados: ${response.data}`);
         return response.data.array;
     }
     catch (error) {
@@ -60,6 +63,7 @@ async function requestUmRecado(usuario, token, idRecado) {
                 Authorization: token
             }
         })
+        console.log(`UmRecado: ${response.data}`);
         return response.data.recado;
     }
     catch (error) {
@@ -79,6 +83,7 @@ async function requestCriarRecado(usuario, token, descricao, detalhamento) {
                 Authorization: token
             }
         })
+        console.log(`CriarRecado: ${response.data}`);
     }
     catch (error) {
         console.log(error);
@@ -97,6 +102,7 @@ async function requestEditarRecado(usuario, token, idRecado, descricao, detalham
                 Authorization: token
             }
         })
+        console.log(`EditarRecado: ${response.data}`);
     }
     catch (error) {
         console.log(error);
@@ -113,6 +119,7 @@ async function requestDeletarRecado(usuario, token, idRecado) {
                 Authorization: token
             }
         })
+        console.log(`DeletarRecado: ${response.data}`);
     }
     catch (error) {
         console.log(error);
