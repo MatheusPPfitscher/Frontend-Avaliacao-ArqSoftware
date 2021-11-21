@@ -2,37 +2,33 @@ function displayAlertaPagina(alerta) {
     let campoAlertaSenha = document.getElementById("alertaSenha")
     let campoAlertaUsuario = document.getElementById("alertaUsuario")
     let campoAlertaUsuarioSenha = document.getElementById("alertaUsuarioSenha")
-
     if (alerta == "vazio") {
         campoAlertaUsuario.innerHTML = "O usuário não pode estar vazio."
     }
-    if (alerta == "usuarioExiste") {
+    else if (alerta == "usuarioExiste") {
         campoAlertaUsuario.innerHTML = "Este usuário já existe."
     }
-    if (alerta == "confiraSenha") {
+    else if (alerta == "confiraSenha") {
         campoAlertaSenha.innerHTML = "As senhas não conferem."
     }
-    if (alerta == "criado") {
+    else if (alerta == "criado") {
         alert("Usuário criado com sucesso.")
         campoAlertaSenha.innerHTML = ""
         campoAlertaUsuario.innerHTML = ""
     }
-    if (alerta == "reset") {
+    else if (alerta == "reset") {
         campoAlertaSenha.innerHTML = ""
         campoAlertaUsuario.innerHTML = ""
     }
-    if (alerta == "usuarioIncorreto") {
+    else if (alerta == "usuarioIncorreto") {
         campoAlertaUsuarioSenha.innerHTML = "Este usuário não existe."
     }
-    if (alerta == "senhaIncorreta") {
+    else if (alerta == "senhaIncorreta") {
         campoAlertaUsuarioSenha.innerHTML = "A senha está incorreta."
     }
-    if (alerta == "erro") {
-        alert("Erro de comunicação com a API.")
-        campoAlertaSenha.innerHTML = ""
-        campoAlertaUsuario.innerHTML = ""
-    }
+    else console.log(alerta)
 }
+
 
 async function criarUsuario() {
     let campoUsuario = document.getElementById("campoUsuario").value
@@ -52,7 +48,7 @@ async function criarUsuario() {
 async function logon() {
     let campoUsuario = document.getElementById("campoUsuario").value
     let campoSenha = document.getElementById("campoSenha").value
-    let resposta = await requestLogon(campoUsuario, campoSenha)
+    let resposta = await requestLogon(campoUsuario, campoSenha);
     if (resposta.msg == "sucesso") {
         sessionStorage.setItem("usuario", campoUsuario)
         sessionStorage.setItem("token", resposta.token)
@@ -77,7 +73,7 @@ async function criarRecado() {
     let tokenSessao = sessionStorage.getItem("token")
     if (descricao != "") {
         await requestCriarRecado(usuarioSessao, tokenSessao, descricao, detalhamento)
-        geraListaRecados(usuarioAtual)
+        geraListaRecados()
     }
 }
 
