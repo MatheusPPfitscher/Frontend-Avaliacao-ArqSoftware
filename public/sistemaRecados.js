@@ -50,7 +50,6 @@ async function logon() {
     let campoSenha = document.getElementById("campoSenha").value
     let resposta = await requestLogon(campoUsuario, campoSenha);
     if (resposta.msg == "sucesso") {
-        sessionStorage.setItem("usuario", campoUsuario)
         sessionStorage.setItem("token", resposta.token)
         window.location.href = "./gerenciador.html";
     } else if (resposta.msg == "senhaIncorreta") {
@@ -69,20 +68,18 @@ function logoff() {
 async function criarRecado() {
     let descricao = document.getElementById("campoDescricaoEntrada").value
     let detalhamento = document.getElementById("campoDetalhamentoEntrada").value
-    let usuarioSessao = sessionStorage.getItem("usuario")
     let tokenSessao = sessionStorage.getItem("token")
     if (descricao != "") {
-        await requestCriarRecado(usuarioSessao, tokenSessao, descricao, detalhamento)
+        await requestCriarRecado(tokenSessao, descricao, detalhamento)
         geraListaRecados()
     }
 }
 
 async function geraListaRecados() {
-    let usuarioSessao = sessionStorage.getItem("usuario")
     let tokenSessao = sessionStorage.getItem("token")
     let tableBody = document.getElementById("listaRecados")
     let conteudoTableBody = ""
-    let arrayRecados = await requestTodosRecados(usuarioSessao, tokenSessao)
+    let arrayRecados = await requestTodosRecados(tokenSessao)
     for (let id in arrayRecados) {
         let conteudoLinha = `<tr>
         <th scope="row">${id}</th>
@@ -102,10 +99,9 @@ async function geraListaRecados() {
 }
 
 async function gerarModalEdicao(idRecadoEditar) {
-    let usuarioSessao = sessionStorage.getItem("usuario")
     let tokenSessao = sessionStorage.getItem("token")
     let modalEdicao = document.getElementById('modalEditar')
-    let recado = await requestUmRecado(usuarioSessao, tokenSessao, idRecadoEditar)
+    let recado = await requestUmRecado(tokenSessao, idRecadoEditar)
     modalEdicao.setAttribute("data-bs-idRecado", idRecadoEditar)
     let modalCampoDescricao = document.getElementById("modalEditarDescricaoRecado")
     modalCampoDescricao.value = recado.descricao
@@ -114,10 +110,9 @@ async function gerarModalEdicao(idRecadoEditar) {
 }
 
 async function gerarModalExclusao(idRecadoExcluir) {
-    let usuarioSessao = sessionStorage.getItem("usuario")
     let tokenSessao = sessionStorage.getItem("token")
     let modalExclusao = document.getElementById('modalExcluir')
-    let recado = await requestUmRecado(usuarioSessao, tokenSessao, idRecadoExcluir)
+    let recado = await requestUmRecado(tokenSessao, idRecadoExcluir)
     modalExclusao.setAttribute("data-bs-idRecado", idRecadoExcluir)
     let modalCampoDescricao = document.getElementById("modalExcluirDescricaoRecado")
     modalCampoDescricao.innerHTML = recado.descricao
@@ -126,31 +121,28 @@ async function gerarModalExclusao(idRecadoExcluir) {
 }
 
 async function salvarModalEditar() {
-    let usuarioSessao = sessionStorage.getItem("usuario")
     let tokenSessao = sessionStorage.getItem("token")
     let modalEditar = document.getElementById('modalEditar')
     let valorDescricaoModal = document.getElementById("modalEditarDescricaoRecado").value
     let valorDetalhamentoModal = document.getElementById("modalEditarDetalhamentoRecado").value
     let idRecadoEditar = modalEditar.getAttribute("data-bs-idRecado")
-    await requestEditarRecado(usuarioSessao, tokenSessao, idRecadoEditar, valorDescricaoModal, valorDetalhamentoModal)
+    await requestEditarRecado(tokenSessao, idRecadoEditar, valorDescricaoModal, valorDetalhamentoModal)
     geraListaRecados()
 }
 
 async function salvarModalExcluir() {
-    let usuarioSessao = sessionStorage.getItem("usuario")
     let tokenSessao = sessionStorage.getItem("token")
     var modalExcluir = document.getElementById('modalExcluir')
     let idRecadoExcluir = modalExcluir.getAttribute("data-bs-idRecado")
-    await requestDeletarRecado(usuarioSessao, tokenSessao, idRecadoExcluir)
-    geraListaRecados(usuarioAtual)
+    await requestDeletarRecado(tokenSessao, idRecadoExcluir)
+    geraListaRecados()
 }
 
 
 function iniciaSistemaRecados() {
-    let usuarioSessao = sessionStorage.getItem("usuario")
     let tokenSessao = sessionStorage.getItem("token")
     if (document.title == "Sistema de Recados") {
-        if ((usuarioSessao != null && tokenSessao != null)) {
+        if ((tokenSessao != null)) {
             geraListaRecados()
         }
         else {

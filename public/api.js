@@ -31,7 +31,7 @@ async function requestLogon(usuario, senha) {
     }
 }
 
-async function requestTodosRecados(usuario, token) {
+async function requestTodosRecados(token) {
     try {
         const config = {
             headers: {
@@ -47,7 +47,7 @@ async function requestTodosRecados(usuario, token) {
     }
 }
 
-async function requestUmRecado(usuario, token, idRecado) {
+async function requestUmRecado(token, idRecado) {
     try {
         const config = {
             headers: {
@@ -62,7 +62,7 @@ async function requestUmRecado(usuario, token, idRecado) {
     }
 }
 
-async function requestCriarRecado(usuario, token, descricao, detalhamento) {
+async function requestCriarRecado(token, descricao, detalhamento) {
     try {
         const data = {
             descricao: descricao,
@@ -80,7 +80,7 @@ async function requestCriarRecado(usuario, token, descricao, detalhamento) {
     }
 }
 
-async function requestEditarRecado(usuario, token, idRecado, descricao, detalhamento) {
+async function requestEditarRecado(token, idRecado, descricao, detalhamento) {
     try {
         const data = {
             descricao,
@@ -98,7 +98,7 @@ async function requestEditarRecado(usuario, token, idRecado, descricao, detalham
     }
 }
 
-async function requestDeletarRecado(usuario, token, idRecado) {
+async function requestDeletarRecado(token, idRecado) {
     try {
         const config = {
             headers: {
