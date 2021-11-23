@@ -40,7 +40,7 @@ async function criarUsuario() {
     } else {
         let alerta = await requestCriarUsuario(campoUsuario, campoSenha)
         displayAlertaPagina(alerta)
-        if (alerta == "criado") window.location.href = "./entrada.html";
+        if (alerta == "criado") window.location.href = "./index.html";
     }
 
 }
@@ -62,7 +62,7 @@ async function logon() {
 
 function logoff() {
     sessionStorage.removeItem("token")
-    window.location.href = "./entrada.html";
+    window.location.href = "./index.html";
 }
 
 async function criarRecado() {
@@ -146,7 +146,7 @@ function iniciaSistemaRecados() {
             geraListaRecados()
         }
         else {
-            window.location.href = "./entrada.html";
+            window.location.href = "./index.html";
         }
     }
 }
