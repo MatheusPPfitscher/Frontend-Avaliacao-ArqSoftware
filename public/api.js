@@ -31,6 +31,19 @@ async function requestLogon(usuario, senha) {
     }
 }
 
+async function requestLogoff(token) {
+    try {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+        const response = await api.delete("/sessao", config)
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
 async function requestTodosRecados(token) {
     try {
         const config = {

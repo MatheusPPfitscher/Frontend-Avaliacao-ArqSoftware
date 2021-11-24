@@ -29,7 +29,6 @@ function displayAlertaPagina(alerta) {
     else console.log(alerta)
 }
 
-
 async function criarUsuario() {
     let campoUsuario = document.getElementById("campoUsuario").value
     let campoSenha = document.getElementById("campoSenha").value
@@ -61,6 +60,8 @@ async function logon() {
 }
 
 function logoff() {
+    let tokenSessao = sessionStorage.getItem("token")
+    requestLogoff(tokenSessao)
     sessionStorage.removeItem("token")
     window.location.href = "./index.html";
 }
