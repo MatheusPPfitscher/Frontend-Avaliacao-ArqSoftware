@@ -1,126 +1,117 @@
 const api = axios.create({
-    baseURL: "https://api-avaliacao-matheuspp.herokuapp.com/"
+    baseURL: "http://localhost:8081"
 });
 
-async function requestCriarUsuario(usuario, senha) {
+async function requestCreateUser(username, password) {
     try {
         const data = {
-            usuario: usuario,
-            senha: senha
+            username: username,
+            password: password
         }
-        const response = await api.post("/usuario", data)
-        return response.data.alerta
+        const response = await api.post("/user", data)
+        console.dir(response)
+        return response.data
     }
     catch (error) {
-        console.log(error);
-        return "error"
+        console.log(error.response);
+        return error.response.data
     }
 }
 
-async function requestLogon(usuario, senha) {
+async function requestLogon(username, password) {
     try {
         const data = {
-            usuario: usuario,
-            senha: senha
+            username: username,
+            password: password
         }
-        const response = await api.post("/sessao", data)
+        const response = await api.post("/auth", data)
         return response.data;
     }
     catch (error) {
-        console.log(error);
+        return error.response.data
     }
 }
 
-async function requestLogoff(token) {
-    try {
-        const config = {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        }
-        const response = await api.delete("/sessao", config)
-    }
-    catch (error) {
-        console.log(error);
-    }
-}
-async function requestTodosRecados(token) {
-    try {
-        const config = {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        }
-        const response = await api.get("/recado", config)
-        console.log("Todos Recados " + JSON.stringify(response.data));
-        return response.data.array;
-    }
-    catch (error) {
-        console.log(error);
-    }
-}
-
-async function requestUmRecado(token, idRecado) {
-    try {
-        const config = {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        }
-        const response = await api.get(`/recado/${idRecado}`, config)
-        return response.data.recado;
-    }
-    catch (error) {
-        console.log(error);
-    }
-}
-
-async function requestCriarRecado(token, descricao, detalhamento) {
+async function requestCreateNote(token, title, details) {
     try {
         const data = {
-            descricao: descricao,
-            detalhamento: detalhamento
+            title,
+            details
         }
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         }
-        const response = await api.post("/recado", data, config)
+        const response = await api.post("/note", data, config)
+        return response.data
     }
     catch (error) {
-        console.log(error);
+        return error.response.data
     }
 }
 
-async function requestEditarRecado(token, idRecado, descricao, detalhamento) {
+async function requestViewNotes(token) {
+    try {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+        const response = await api.get("/note", config)
+        return response.data;
+    }
+    catch (error) {
+        return error.response.data
+    }
+}
+
+async function requestViewSingleNote(token, noteId) {
+    try {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+        const response = await api.get(`/note/${noteId}`, config)
+        return response.data;
+    }
+    catch (error) {
+        return error.response.data
+    }
+}
+
+
+async function requestEditNote(token, noteId, title, details) {
     try {
         const data = {
-            descricao,
-            detalhamento
+            title,
+            details
         }
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         }
-        const response = await api.put(`/recado/${idRecado}`, data, config)
+        const response = await api.put(`/note/${noteId}`, data, config)
+        return response.data
     }
     catch (error) {
-        console.log(error);
+        return error.response.data
     }
 }
 
-async function requestDeletarRecado(token, idRecado) {
+async function requestDeleteNote(token, noteId) {
     try {
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         }
-        const response = await api.delete(`/recado/${idRecado}`, config)
+        const response = await api.delete(`/note/${noteId}`, config)
+        return response.data
     }
     catch (error) {
-        console.log(error);
+        return error.response.data
     }
 }

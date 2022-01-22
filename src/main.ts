@@ -1,4 +1,5 @@
 import express from 'express';
+require('dotenv').config();
 
 const app = express();
 
@@ -6,6 +7,5 @@ app.use(express.json());
 
 app.use(express.static(__dirname + "/../public"));
 
-const port = process.env.PORT || 8081;
 
-app.listen(port, () => console.log("Server is running on " + port));
+app.listen(process.env.PORT, () => console.log("Server is running on " + process.env.PORT));
