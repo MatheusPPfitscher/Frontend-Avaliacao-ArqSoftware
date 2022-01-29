@@ -20,7 +20,7 @@ function setPageMessage(messageType) {
         campoAlertaSenha.innerHTML = ""
         campoAlertaUsuario.innerHTML = ""
     }
-    else if (messageType == "invalidLogin") {
+    else if (messageType == "InvalidLogin") {
         campoAlertaUsuarioSenha.innerHTML = "Usuário ou senha estão incorretos."
     }
     else console.log(messageType)
@@ -45,11 +45,11 @@ async function logon() {
     let campoUsuario = document.getElementById("campoUsuario").value
     let campoSenha = document.getElementById("campoSenha").value
     let requestResult = await requestLogon(campoUsuario, campoSenha);
-    if (requestResult.msg === "Logon") {
-        sessionStorage.setItem("token", requestResult.token)
+    if (requestResult.msg === "LogonSuccessful") {
+        sessionStorage.setItem("token", requestResult.data)
         window.location.href = "./gerenciador.html";
-    } else if (requestResult.msg === "invalidLogin") {
-        setPageMessage("invalidLogin");
+    } else if (requestResult.msg === "InvalidLogin") {
+        setPageMessage("InvalidLogin");
     }
 }
 
