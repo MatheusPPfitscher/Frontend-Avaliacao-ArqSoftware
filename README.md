@@ -1,6 +1,6 @@
 # Avaliacao Modulo Banco de dados - frontend
 
-Minha resolução da Avaliação Final de Arquitetura de Software no Programa Starter Desenvolvimento Web Full Stack.
+Minha resolução da Avaliação Final de Introdução a Arquitetura de Software no Programa Starter Desenvolvimento Web Full Stack.
 
 Não é aplicado os conceitos de Arquitetura neste frontend, apenas na API que o serve.
 
