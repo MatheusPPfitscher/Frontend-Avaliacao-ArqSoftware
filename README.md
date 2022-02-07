@@ -1,4 +1,4 @@
-# Avaliacao Modulo Banco de dados - frontend
+# Avaliacao Modulo Introdução a Arquitetura de Software - frontend
 
 Minha resolução da Avaliação Final de Introdução a Arquitetura de Software no Programa Starter Desenvolvimento Web Full Stack.
 
